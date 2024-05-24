@@ -30,7 +30,6 @@ def cartes_eligibles(m,p):
 
 def tirar_carta(m, c, p):
     p = c
-    print(p)
     m.remove(c)
     return p
 
@@ -47,13 +46,12 @@ def generar_cartes(ma, n):
 
 def torn_bot(bot, pila):
     print("Torn de", bot['nom'])
-    print(bot['cartes'])
     cartes_valides = cartes_eligibles(bot['cartes'], pila)
     if not cartes_valides:
         roba_carta(bot)
-        print("El", bot['nom'], "ha robat una carta")
     else:
         pila = tirar_carta(bot['cartes'], cartes_valides[0], pila)
+        print("El", bot['nom'], "ha tirat la carta,", cartes_valides[0])
     return pila
 
 def torn_jugador(jugador, pila):
@@ -98,9 +96,24 @@ for i in range(1,n):
     l_bots.append(bot)
 
 pila = crear_carta()
-print(pila)
-pila = torn_jugador(jugador, pila)
-for b in l_bots:
-    time.sleep(2)
-    print("\n")
-    pila = torn_bot(b, pila)
+
+guanyador = ''
+while True:
+    pila = torn_jugador(jugador, pila)
+    if len(jugador['cartes']) == 1:
+        print("UNO")
+    if not jugador['cartes']:
+        guanyador = jugador['nom']
+        break
+    for b in l_bots:
+        time.sleep(2)
+        print("\n")
+        pila = torn_bot(b, pila)
+        if len(b['cartes']) == 1:
+            print("UNO")
+        if not b['cartes']:
+            guanyador = b['nom']
+            break
+
+print("=============== FINAL DE PARTIDA ===============")
+print("El guanyador és el", guanyador)
